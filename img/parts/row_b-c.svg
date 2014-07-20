@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1200"
+   height="800"
+   id="svg2985"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="row_a-l.svg"
+   inkscape:export-filename="/var/www/iovar/exp/foreverretrorace/graphics.png"
+   inkscape:export-xdpi="360"
+   inkscape:export-ydpi="360">
+  <defs
+     id="defs2987">
+    <pattern
+       inkscape:collect="always"
+       xlink:href="#Checkerboard-4"
+       id="pattern5584"
+       patternTransform="matrix(10,0,0,10,-553.95891,-500.30039)" />
+    <pattern
+       inkscape:collect="always"
+       xlink:href="#pattern5546"
+       id="pattern5560"
+       patternTransform="matrix(5.0211045,0,0,6.3104708,136.85894,40.380795)" />
+    <pattern
+       inkscape:collect="always"
+       xlink:href="#pattern5550"
+       id="pattern5558"
+       patternTransform="matrix(5.0211045,0,0,6.3104708,307.99211,-106.7391)" />
+    <pattern
+       inkscape:collect="always"
+       xlink:href="#pattern5500"
+       id="pattern5550"
+       patternTransform="matrix(7.7989077,0,0,9.8571429,300.74441,-268.06269)" />
+    <pattern
+       inkscape:collect="always"
+       xlink:href="#pattern5500-8"
+       id="pattern5546"
+       patternTransform="matrix(7.7989077,0,0,9.8571429,111.98069,-93.822067)" />
+    <pattern
+       inkscape:collect="always"
+       xlink:href="#Checkerboard"
+       id="pattern5500"
+       patternTransform="matrix(7.7692307,0,0,9.8571429,84.552795,-36.279006)" />
+    <pattern
+       inkscape:stockid="Checkerboard"
+       id="Checkerboard"
+       patternTransform="translate(0,0) scale(10,10)"
+       height="2"
+       width="2"
+       patternUnits="userSpaceOnUse"
+       inkscape:collect="always">
+      <rect
+         id="rect4821"
+         height="1"
+         width="1"
+         y="0"
+         x="0"
+         style="fill:black;stroke:none" />
+      <rect
+         id="rect4823"
+         height="1"
+         width="1"
+         y="1"
+         x="1"
+         style="fill:black;stroke:none" />
+    </pattern>
+    <pattern
+       inkscape:collect="always"
+       xlink:href="#Checkerboard-4"
+       id="pattern5500-8"
+       patternTransform="matrix(7.7692307,0,0,9.8571429,84.552795,-36.279006)" />
+    <pattern
+       inkscape:stockid="Checkerboard"
+       id="Checkerboard-4"
+       patternTransform="translate(0,0) scale(10,10)"
+       height="2"
+       width="2"
+       patternUnits="userSpaceOnUse"
+       inkscape:collect="always">
+      <rect
+         id="rect4821-9"
+         height="1"
+         width="1"
+         y="0"
+         x="0"
+         style="fill:black;stroke:none" />
+      <rect
+         id="rect4823-7"
+         height="1"
+         width="1"
+         y="1"
+         x="1"
+         style="fill:black;stroke:none" />
+    </pattern>
+    <pattern
+       patternTransform="matrix(-8.3178829,-7.0710678,-5.8242527,7.0710678,564.66238,286.43123)"
+       id="pattern5621"
+       xlink:href="#pattern5603-4"
+       inkscape:collect="always" />
+    <pattern
+       inkscape:collect="always"
+       xlink:href="#pattern5598-7"
+       id="pattern5603-4"
+       patternTransform="matrix(-10,0,0,10,469.8125,0)" />
+    <pattern
+       inkscape:collect="always"
+       xlink:href="#Checkerboard-4-1"
+       id="pattern5598-7"
+       patternTransform="matrix(10,0,0,10,0,32)" />
+    <pattern
+       inkscape:stockid="Checkerboard"
+       id="Checkerboard-4-1"
+       patternTransform="translate(0,0) scale(10,10)"
+       height="2"
+       width="2"
+       patternUnits="userSpaceOnUse"
+       inkscape:collect="always">
+      <rect
+         id="rect4821-9-5"
+         height="1"
+         width="1"
+         y="0"
+         x="0"
+         style="fill:black;stroke:none" />
+      <rect
+         id="rect4823-7-5"
+         height="1"
+         width="1"
+         y="1"
+         x="1"
+         style="fill:black;stroke:none" />
+    </pattern>
+    <pattern
+       patternTransform="matrix(8.3178829,-7.0710678,5.8242527,7.0710678,-341.21349,286.43123)"
+       id="pattern5659"
+       xlink:href="#pattern5621-1"
+       inkscape:collect="always" />
+    <pattern
+       patternTransform="matrix(-8.3178829,-7.0710678,-5.8242527,7.0710678,564.66238,286.43123)"
+       id="pattern5621-1"
+       xlink:href="#pattern5603-4-7"
+       inkscape:collect="always" />
+    <pattern
+       inkscape:collect="always"
+       xlink:href="#pattern5598-7-3"
+       id="pattern5603-4-7"
+       patternTransform="matrix(-10,0,0,10,469.8125,0)" />
+    <pattern
+       inkscape:collect="always"
+       xlink:href="#Checkerboard-4-1-1"
+       id="pattern5598-7-3"
+       patternTransform="matrix(10,0,0,10,0,32)" />
+    <pattern
+       inkscape:stockid="Checkerboard"
+       id="Checkerboard-4-1-1"
+       patternTransform="translate(0,0) scale(10,10)"
+       height="2"
+       width="2"
+       patternUnits="userSpaceOnUse"
+       inkscape:collect="always">
+      <rect
+         id="rect4821-9-5-5"
+         height="1"
+         width="1"
+         y="0"
+         x="0"
+         style="fill:black;stroke:none" />
+      <rect
+         id="rect4823-7-5-1"
+         height="1"
+         width="1"
+         y="1"
+         x="1"
+         style="fill:black;stroke:none" />
+    </pattern>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.46401523"
+     inkscape:cx="1174.6268"
+     inkscape:cy="245.1849"
+     inkscape:current-layer="layer1"
+     inkscape:document-units="px"
+     showgrid="false"
+     inkscape:window-width="1600"
+     inkscape:window-height="836"
+     inkscape:window-x="-3"
+     inkscape:window-y="-3"
+     inkscape:window-maximized="1"
+     showguides="false"
+     inkscape:guide-bbox="true">
+    <sodipodi:guide
+       orientation="0,1"
+       position="-49.105175,800.1255"
+       id="guide3791" />
+    <sodipodi:guide
+       orientation="0,1"
+       position="-63.547874,531.49131"
+       id="guide3793" />
+    <sodipodi:guide
+       orientation="0,1"
+       position="266.70927,170.34979"
+       id="guide4015" />
+    <sodipodi:guide
+       orientation="0,1"
+       position="528.25642,316.60971"
+       id="guide4017" />
+    <sodipodi:guide
+       orientation="0,1"
+       position="526.53571,435.33835"
+       id="guide4019" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata2990">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     transform="translate(0,32)">
+    <path
+       inkscape:connector-curvature="0"
+       style="opacity:0.7;fill:#000000;fill-opacity:1;stroke:none"
+       d="m 576.37032,358.32824 c -1.32484,0 -3.35952,0.44206 -4.5696,1.005 l -3.4861,1.63313 c -1.21008,0.56294 -1.10499,1.005 0.21985,1.005 l 18.29414,0 -2.57532,8.38547 -4.23984,0 0,3.34476 c -2.27813,-4.5e-4 -4.55184,0 -6.83086,0 l 0,-6.12422 -11.30625,0 0,13.80305 11.30625,0 0,-6.12422 c 2.27902,-0.003 4.55273,0.002 6.83086,0 l 0,2.84227 1.86867,0 -4.0514,13.22203 c -3.06505,3.3605 -4.88368,7.48224 -4.88368,11.95008 0,1.02917 0.0819,2.04246 0.26696,3.0307 l -0.91078,2.95219 -4.67954,0 0,-13.59891 -25.10929,0 0,30.66821 25.10929,0 0,-13.59891 8.24414,0 c 4.28939,6.50449 12.85633,10.94508 22.73813,10.94508 0.48283,0 0.96843,-0.0105 1.44469,-0.0314 0.47625,0.0209 0.97755,0.0314 1.46039,0.0314 9.8818,0 18.44874,-4.44059 22.73812,-10.94508 l 8.24414,0 0,13.59891 25.1093,0 0,-30.66821 -25.1093,0 0,13.59891 -4.67953,0 -0.92648,-2.95219 c 0.18506,-0.98824 0.28265,-2.00153 0.28265,-3.0307 0,-4.46784 -1.81862,-8.58958 -4.88367,-11.95008 l -4.06711,-13.22203 1.86867,0 0,-2.84227 c 2.27696,4.6e-4 4.55302,0 6.83086,0 l 0,6.12422 11.30625,0 0,-13.80305 -11.30625,0 0,6.12422 c -2.27784,0.003 -4.5539,-0.001 -6.83086,0 l 0,-3.34476 -4.23984,0 -2.57531,-8.38547 18.30984,0 c 1.32484,0 1.41423,-0.44206 0.20414,-1.005 l -3.47039,-1.63313 c -1.21008,-0.56294 -3.26046,-1.005 -4.58531,-1.005 l -23.68031,0 -23.68032,0 z m 13.5204,7.30196 20.33554,0 1.68024,7.30195 -11.85586,0 -11.85586,0 1.69594,-7.30195 z m -0.80086,14.39976 3.20343,0 c -0.0609,0.24348 -0.10992,0.48266 -0.10992,0.73805 0,0.93952 0.42983,1.81334 1.16203,2.5282 -1.97885,0.32779 -3.87014,0.84038 -5.65312,1.5075 l 1.39758,-4.77375 z m 18.73382,0 3.20344,0 1.38188,4.77375 c -1.78298,-0.66712 -3.65858,-1.17971 -5.63743,-1.5075 0.7322,-0.71486 1.14633,-1.58868 1.14633,-2.5282 0,-0.25539 -0.0333,-0.49457 -0.0942,-0.73805 z"
+       id="rect3046-5-5-5" />
+  </g>
+</svg>
