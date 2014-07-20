@@ -1,7 +1,9 @@
-more cars, more points, reach difficulty faster ???
-finish state transitioning
+New level change scores: 
+  0:500,1:1100,2:1800,3:2600,4:3500,5:4500,6:5600,7:6800,8:8100,9:9999(game over)
+finish state transitioning (pit stops, game over, no life loss pause on demo, game win)
+score never goes above 9999
 phonegap
 sounds
-optimize
+optimize make smooth
 adv at gameover or money to buy???
 
