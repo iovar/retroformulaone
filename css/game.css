@@ -12,6 +12,11 @@
   display: none;
 }
 
+.lcd-panel img.bottom {
+  top: auto;
+  bottom: 0;
+}
+
 .lcd-panel img.on {
   display: block;
 }
