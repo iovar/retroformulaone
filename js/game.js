@@ -12,6 +12,7 @@ var game = {
   score: 0,
   lives: 3,
   level: 0,
+  change: 0,
   // 0 : pre-game
   // 1 : playing
   // 2 : lost life
@@ -24,6 +25,7 @@ var game = {
     round : 0,
     crash: 0
   },
+  inputBlocked: false,
   chances: [
     [4,2],
     [5,2],
@@ -36,6 +38,25 @@ var game = {
     [9,6],
     [9,7]
   ],
+  levels: [
+    500,
+    1100,
+    1800,
+    2600,
+    3500,
+    4500,
+    5600,
+    6800,
+    8100,
+    9999
+  ],
+  pitstops: [
+    2000,
+    5000,
+    7800,
+    10000
+  ],
+  pitstops_made: 0,
   rounds: [
     14,
     13,
@@ -125,19 +146,22 @@ var game = {
     return score;
   },
   checkLevel: function(score) {
-    if(game.level * 1000 +999 < score) {
+    if(score> game.levels[game.level]) {
+      console.log('level');
       game.level+=1;
     }
   },
   rollCars: function() {
     var matrix = game.matrix;
     
-    if(game.checkCrash()) {
+    if(game.state !== 0 && game.checkCrash()) {
       game.lives--;
       //play sound
       if(game.lives>0) {
         game.state = 2;
+        game.change++;
         setTimeout(function() {
+          game.change++;
           game.resetMatrix();
           game.render();
           game.state = 1;
@@ -145,18 +169,45 @@ var game = {
       }
       else {
         game.state = 4;
+        game.inputBlocked = true;
+        game.change++;
         setTimeout(function() {
+          game.inputBlocked = false;
+          game.change++;
           game.state = 0;
         },4000);
       }
     }
     if(game.state === 1) {
       game.score += game.getPoints(game.matrix[2]);
-      game.checkLevel(game.score);
+      if(game.score >=9999) {
+        game.score = 9999;
+        game.state = 5;
+        game.inputBlocked = true;
+        setTimeout(function() {
+          game.inputBlocked = false;
+        }, 5000);
+        game.change++;
+      }
+      else if(game.score >= game.pitstops[game.pitstops_made]) {
+        game.pitstops_made++;
+        game.state = 3;
+        game.inputBlocked = true;
+        setTimeout(function() {
+          game.inputBlocked = false;
+        }, 3000);
+        game.change++;
+        game.matrix[3] = [false, false, false];
+      }
+      else {
+        game.checkLevel(game.score);
+      }
     }
-    game.matrix[2] = game.matrix[1];
-    game.matrix[1] = game.matrix[0];
-    game.matrix[0] = game.newRow();
+    if(game.state !== 2 && game.state !== 3) {
+      game.matrix[2] = game.matrix[1];
+      game.matrix[1] = game.matrix[0];
+      game.matrix[0] = game.newRow();
+    }
   },
   loop: function() {
     if(game.counters.round >= game.rounds[game.level]) {
@@ -169,6 +220,10 @@ var game = {
     }
     else {
       game.renderSelf();
+      if(game.change > 0) {
+        game.renderOther();
+        game.change--;
+      }
       game.counters.round++;
     }
   },
@@ -187,14 +242,25 @@ var game = {
     game.lives = 3;
     game.level = 0;
     game.state = 0;
+    game.change = 1;
+    game.pitstops_made = 0;
+    game.inputBlocked = false;
   },
   start: function() {
     game.reset();
     game.state = 1;
   },
   resume: function() {
+    game.matrix[3][1] = true;
+    game.resetMatrix();
+    game.change++;
+    game.state = 1;
+    game.render();
   },
   left: function() {
+    if(game.inputBlocked) {
+      return;
+    }
     switch(game.state) {
       case 0: 
         game.start();
@@ -221,6 +287,9 @@ var game = {
     }
   },
   right: function() {
+    if(game.inputBlocked) {
+      return;
+    }
     switch(game.state) {
       case 0: 
         game.start();
@@ -323,12 +392,21 @@ var game = {
       game.hide(game.ds.fuel_pump);
       game.hide(game.ds.pit_stop);
     }
+    if(game.state === 5 ) {
+      game.show(game.ds.flags);
+    }
+    else {
+      game.hide(game.ds.flags);
+    }
   },
   render: function() {
     game.renderMatrix();
     game.renderLives();
     game.setScore();
-    game.renderOther();
+    if(game.change > 0) {
+      game.renderOther();
+      game.change--;
+    }
   }
 
 
