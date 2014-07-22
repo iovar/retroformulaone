@@ -147,17 +147,17 @@ var game = {
   },
   checkLevel: function(score) {
     if(score> game.levels[game.level]) {
-      console.log('level');
       game.level+=1;
     }
   },
   rollCars: function() {
     var matrix = game.matrix;
     
+
     if(game.state !== 0 && game.checkCrash()) {
       game.lives--;
-      //play sound
       if(game.lives>0) {
+        audio.play('crash');
         game.state = 2;
         game.change++;
         setTimeout(function() {
@@ -168,6 +168,7 @@ var game = {
         },2000);
       }
       else {
+        audio.play('die');
         game.state = 4;
         game.inputBlocked = true;
         game.change++;
@@ -181,6 +182,7 @@ var game = {
     if(game.state === 1) {
       game.score += game.getPoints(game.matrix[2]);
       if(game.score >=9999) {
+        audio.play('win');
         game.score = 9999;
         game.state = 5;
         game.inputBlocked = true;
@@ -190,6 +192,7 @@ var game = {
         game.change++;
       }
       else if(game.score >= game.pitstops[game.pitstops_made]) {
+        audio.play('move');
         game.pitstops_made++;
         game.state = 3;
         game.inputBlocked = true;
@@ -200,6 +203,7 @@ var game = {
         game.matrix[3] = [false, false, false];
       }
       else {
+        audio.play('roll');
         game.checkLevel(game.score);
       }
     }
@@ -263,12 +267,14 @@ var game = {
     }
     switch(game.state) {
       case 0: 
+        audio.play('move');
         game.start();
         break;
       case 2:
       case 4:
         break;
       case 3:
+        audio.play('move');
         game.resume();
         break;
       case 5:
@@ -276,6 +282,7 @@ var game = {
         game.start();
         break;
       default:
+        audio.play('move');
         if(game.matrix[3][1]) {
           game.matrix[3][1] = false;
           game.matrix[3][0] = true;
@@ -292,12 +299,14 @@ var game = {
     }
     switch(game.state) {
       case 0: 
+        audio.play('move');
         game.start();
         break;
       case 2:
       case 4:
         break;
       case 3:
+        audio.play('move');
         game.resume();
         break;
       case 5:
@@ -305,6 +314,7 @@ var game = {
         game.start();
         break;
       default:
+        audio.play('move');
         if(game.matrix[3][0]) {
           game.matrix[3][0] = false;
           game.matrix[3][1] = true;
