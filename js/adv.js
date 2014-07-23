@@ -11,7 +11,7 @@ var adv = {
   show : function() {
     adv.load();
     var offsetH = (window.innerHeight - 290)/2,
-        offsetW = (window.innerWidth - 320)/2;
+        offsetW = (window.innerWidth - 300)/2;
     adv.elem.style.top = offsetH +"px";
     adv.elem.style.left= offsetW +"px";
   },
