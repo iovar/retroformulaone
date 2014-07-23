@@ -7,9 +7,12 @@ var audio = {
     [9,12.6] //game win
   ],
   ready: false,
-  buffer: document.getElementsByTagName('audio')[0],
+  buffer: null,
   nextMarker: 0,
   load: function() {
+    if(audio.buffer === null) {
+      audio.buffer = new Audio('audio/sounds.mp3');
+    }
     audio.buffer.load();
     audio.buffer.addEventListener("timeupdate", function() {
       if(audio.buffer.currentTime > audio.nextMarker) {
