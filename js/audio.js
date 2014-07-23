@@ -1,15 +1,16 @@
 var audio = {
   markers: [
-    [0, 1], //roll
-    [2,3], //move
-    [4,5], //lose life
-    [6,8], //game over
-    [9,13] //game win
+    [0,0.3], //roll
+    [2,2.3], //move
+    [4,4.3], //lose life
+    [6,7.6], //game over
+    [9,12.6] //game win
   ],
-  buffer: null,
+  ready: false,
+  buffer: document.getElementsByTagName('audio')[0],
   nextMarker: 0,
   load: function() {
-    audio.buffer = new Audio('audio/sounds.mp3');
+    audio.buffer.load();
     audio.buffer.addEventListener("timeupdate", function() {
       if(audio.buffer.currentTime > audio.nextMarker) {
         audio.buffer.pause();
@@ -17,7 +18,8 @@ var audio = {
     });
   },
   play: function(sound) {
-    if(audio.buffer === null) {
+    if(!audio.ready) {
+      audio.ready = true;
       audio.load();
       return;
     }
