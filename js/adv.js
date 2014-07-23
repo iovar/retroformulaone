@@ -14,9 +14,11 @@ var adv = {
         offsetW = (window.innerWidth - 300)/2;
     adv.elem.style.top = offsetH +"px";
     adv.elem.style.left= offsetW +"px";
+    adv.elem.style.height = "290px";
   },
   hide : function() {
     adv.load();
     adv.elem.style.top = "100%";
+    adv.elem.style.height = "0";
   }
 };
