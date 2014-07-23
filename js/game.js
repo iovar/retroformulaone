@@ -172,6 +172,7 @@ var game = {
         game.state = 4;
         game.inputBlocked = true;
         game.change++;
+        adv.show();
         setTimeout(function() {
           game.inputBlocked = false;
           game.change++;
