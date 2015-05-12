@@ -67,7 +67,7 @@ var game = {
     8,
     7,
     6,
-    5 
+    5
   ],
   init: function(screen) {
     var ds = game.ds;
@@ -137,7 +137,7 @@ var game = {
       }
     }
     switch(cn) {
-      case 1: 
+      case 1:
         score = 20;
         break;
       case 2:
@@ -152,7 +152,7 @@ var game = {
   },
   rollCars: function() {
     var matrix = game.matrix;
-    
+
 
     if(game.state !== 0 && game.checkCrash()) {
       game.lives--;
@@ -172,7 +172,6 @@ var game = {
         game.state = 4;
         game.inputBlocked = true;
         game.change++;
-        adv.show();
         setTimeout(function() {
           game.inputBlocked = false;
           game.change++;
@@ -219,7 +218,7 @@ var game = {
       game.counters.round = 0;
       if(game.state === 1 ||
           game.state === 0 ) {
-       game.rollCars(); 
+       game.rollCars();
       }
       game.render();
     }
@@ -267,7 +266,7 @@ var game = {
       return;
     }
     switch(game.state) {
-      case 0: 
+      case 0:
         audio.play('move');
         game.start();
         break;
@@ -299,7 +298,7 @@ var game = {
       return;
     }
     switch(game.state) {
-      case 0: 
+      case 0:
         audio.play('move');
         game.start();
         break;

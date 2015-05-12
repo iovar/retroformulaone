@@ -3,10 +3,10 @@ html, body {
 }
 
 body {
-  padding: 0 0 6px;
+  padding: 0;
   margin: 0;
   box-sizing: border-box;
-  background: rgba(95, 158, 160, 1);
+  background: #000;
   -moz-user-select: -moz-none;
   -webkit-user-select: none;
 }
@@ -18,12 +18,11 @@ body {
 }
 
 .base-panel {
-  background:#111;
-  box-shadow: 0 6px 3px #000;
+  background: #f0f0f0;
+  box-shadow: inset 0 2px 1px rgba(0, 0, 0, 0.25),inset 0 -2px 1px rgba(127, 127, 127, 1), inset -2px 0 1px rgba(127, 127, 127, 1), inset 2px 0 1px rgba(127, 127, 127, 1);
   border-radius: 9px;
-  border-bottom: 2px solid rgba(255,255,255,0.1);
   text-align: center;
-  padding: 20px 20px 105px; 
+  padding: 20px 20px 105px;
   height: 100%;
   box-sizing: border-box;
 }
@@ -32,7 +31,7 @@ body {
   text-align: center;
   box-shadow: inset 0 0 8px #000;
   border-radius: 2px;
-  background: #91B49C;
+  background: #eee;
   color: rgba(0,0,0,0.7);
   font-family: monospace;
   font-size: 3em;
@@ -43,19 +42,16 @@ body {
 }
 
 .button {
-  background: #cc4;
+  background: #399;
   width: 78px;
   height: 78px;
   box-sizing: border-box;
-  border-radius: 100px;
-  box-shadow: 0 4px 4px #663;
-  border-bottom: 2px solid #ee6;
+  border-radius: 4px;
+  box-shadow: inset 0 -2px 2px #355;
 }
 
 .active .button {
-  position: relative;
-  top: 3px;
-  box-shadow: 0 2px 3px #883;
+  box-shadow: inset 0 1px 2px #355, inset 1px 0 2px #355, inset -1px 0 2px #355;
 }
 
 .left-button {
