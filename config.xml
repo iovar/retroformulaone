@@ -8,10 +8,12 @@
         android-versionCode = "2">
 
     <name>Formula One Racing BB</name>
+
     <description>
         A retro racing game, that will take you back in time and provide you with endless fun.
     </description>
-    <author href="http://beefybyte.com" email="iovar@beefybyte.com">
+
+    <author href="http://beefybyte.com" email="johnvarouhakis@gmail.com">
         John Varouhakis
     </author>
 
@@ -19,8 +21,10 @@
         Enable individual API permissions here.
         The "device" permission is required for the 'deviceready' event.
     -->
+    <feature name="http://api.phonegap.com/1.0/device" />
+
     <preference name="permissions"                value="none"/>
-    <preference name="orientation"                value="default" />
+    <preference name="orientation"                value="landscape" />
     <preference name="target-device"              value="universal" />
     <preference name="fullscreen"                 value="true" />
     <preference name="webviewbounce"              value="false" />
@@ -34,37 +38,24 @@
     <preference name="disable-cursor"             value="false" />
     <preference name="android-minSdkVersion"      value="14" />
     <preference name="android-installLocation"    value="auto" />
+    <preference name="SplashScreen"               value="screen" />
+    <preference name="SplashScreenDelay"          value="3000" />
 
     <gap:plugin name="org.apache.cordova.console" />
     <gap:plugin name="org.apache.cordova.device" />
     <gap:plugin name="org.apache.cordova.device-orientation" />
-    <gap:plugin name="org.apache.cordova.dialogs" />
-    <gap:plugin name="org.apache.cordova.file" />
-    <gap:plugin name="org.apache.cordova.file-transfer" />
-    <gap:plugin name="org.apache.cordova.globalization" />
-    <gap:plugin name="org.apache.cordova.inappbrowser" />
-    <gap:plugin name="org.apache.cordova.media" />
-    <gap:plugin name="org.apache.cordova.network-information" />
     <gap:plugin name="org.apache.cordova.splashscreen" />
-    <gap:plugin name="org.apache.cordova.vibration" />
+
     <icon src="icon.png" />
-    <preference name="SplashScreen" value="screen" />
-    <preference name="SplashScreenDelay" value="3000" />
 
+
+    <gap:splash src="splash.png" />
     <!-- Define app splash screen for each platform. -->
-    <!--<gap:splash gap:qualifier="port-ldpi" gap:platform="android" src="res/drawable-port-ldpi/screen.png" />-->
-    <!--<gap:splash gap:qualifier="port-mdpi" gap:platform="android" src="res/drawable-port-mdpi/screen.png" />-->
-    <!--<gap:splash gap:qualifier="port-hdpi" gap:platform="android" src="res/drawable-port-hdpi/screen.png" />-->
-    <!--<gap:splash gap:qualifier="port-xhdpi" gap:platform="android" src="res/drawable-port-xhdpi/screen.png" />-->
-    <!--<gap:splash gap:qualifier="land-ldpi" gap:platform="android" src="res/drawable-land-ldpi/screen.png" />-->
-    <!--<gap:splash gap:qualifier="land-mdpi" gap:platform="android" src="res/drawable-land-mdpi/screen.png" />-->
-    <!--<gap:splash gap:qualifier="land-hdpi" gap:platform="android" src="res/drawable-land-hdpi/screen.png" />-->
-    <!--<gap:splash gap:qualifier="land-xhdpi" gap:platform="android" src="res/drawable-land-xhdpi/screen.png" />-->
+    <gap:splash src="res/screen/android/ldpi_landscape.png"  gap:platform="android" gap:qualifier="land-ldpi" />
+    <gap:splash src="res/screen/android/mdpi_landscape.png"  gap:platform="android" gap:qualifier="land-mdpi" />
+    <gap:splash src="res/screen/android/hdpi_landscape.png"  gap:platform="android" gap:qualifier="land-hdpi" />
+    <gap:splash src="res/screen/android/xhdpi_landscape.png" gap:platform="android" gap:qualifier="land-xhdpi" />
 
-    <gap:splash src="res/screen/android/screen-ldpi-portrait.png"  gap:platform="android" gap:density="ldpi" />
-    <gap:splash src="res/screen/android/screen-mdpi-portrait.png"  gap:platform="android" gap:density="mdpi" />
-    <gap:splash src="res/screen/android/screen-hdpi-portrait.png"  gap:platform="android" gap:density="hdpi" />
-    <gap:splash src="res/screen/android/screen-xhdpi-portrait.png" gap:platform="android" gap:density="xhdpi" />
 
     <access origin="*" />
 </widget>
