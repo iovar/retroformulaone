@@ -1,117 +1,62 @@
-var _audioTag = {
-  markers: [
+export class Audio {
+  context = null;
+  buffer = null;
+  loaded = false;
+
+  /**
+   * filename: string
+   * markers: { [key: string]: { start: number, end: number } }
+   */
+  constructor(filename, markers) {
+    this.markers = markers;
+    this.filename = filename;
+//    this.init();
+  }
+
+  init() {
+    try {
+      this.context = new AudioContext();
+    }
+    catch (e) {
+      console.error('Failed to initialize audio context', e.stacktrace);
+    }
+  }
+
+  async load() {
+    if (!this.context) {
+      this.init();
+    }
+    if(this.buffer !== null) {
+      return;
+    }
+
+    const file = await fetch(this.filename);
+    const raw = await file.arrayBuffer();
+    await this.context.decodeAudioData(raw, (data) => this.buffer = data);
+  }
+
+  async play(sound) {
+    if(!this.loaded) {
+      this.loaded = true;
+      await this.load();
+      return;
+    }
+
+    const { start, end } = this.markers[sound] || { start: 0, end: 0 };
+    const source = this.context.createBufferSource();
+    source.buffer = this.buffer;
+    source.connect(this.context.destination);
+    source.start(0, start, end - start);
+  }
+};
+const markers = [
     [0,0.3], //roll
     [2,2.3], //move
     [4,4.3], //lose life
     [6,7.6], //game over
     [9,12.6] //game win
-  ],
-  ready: false,
-  buffer: null,
-  nextMarker: 0,
-  load: function() {
-    if(audio.buffer === null) {
-      audio.buffer = new Audio('audio/sounds.mp3');
-    }
-    audio.buffer.load();
-    audio.buffer.addEventListener("timeupdate", function() {
-      if(audio.buffer.currentTime > audio.nextMarker) {
-        audio.buffer.pause();
-      }
-    });
-  },
-  play: function(sound) {
-    if(!audio.ready) {
-      audio.ready = true;
-      audio.load();
-      return;
-    }
-    else if (audio.buffer && audio.buffer.readyState !==4) {
-      return;
-    }
-    var limits = null;
-    switch(sound) {
-      case 'roll':
-        limits = audio.markers[0];
-        break;
-      case 'move':
-        limits = audio.markers[1];
-        break;
-      case 'crash':
-        limits = audio.markers[2];
-        break;
-      case 'die':
-        limits = audio.markers[3];
-        break;
-      case 'win':
-        limits = audio.markers[4];
-        break;
-      default:
-        limits = [0,0];
-    }
-    audio.buffer.currentTime = limits[0];
-    audio.nextMarker = limits[1];
-    audio.buffer.play();
-  }
+];
+const filename = 'audio/sounds.mp3';
 
-};
-
-var _audioCordova = {
-  markers: [
-    [0,300], //roll
-    [2000,2300], //move
-    [4000,4300], //lose life
-    [6000,7600], //game over
-    [9000,12600] //game win
-  ],
-  ready: false,
-  buffer: null,
-  nextMarker: 0,
-  timer: -1,
-  load: function() {
-    if(audio.buffer === null) {
-      audio.buffer = new Media("file:///android_asset/www/audio/sounds.mp3");
-      audio.timer = setInterval(function() {
-        audio.buffer.getCurrentPosition( function(position) {
-          if(position*1000 > audio.nextMarker) {
-            audio.buffer.pause();
-          }
-        });
-      },100);
-      audio.buffer.play();
-    }
-  },
-  play: function(sound) {
-    var limits = null;
-    switch(sound) {
-      case 'roll':
-        limits = audio.markers[0];
-        break;
-      case 'move':
-        limits = audio.markers[1];
-        break;
-      case 'crash':
-        limits = audio.markers[2];
-        break;
-      case 'die':
-        limits = audio.markers[3];
-        break;
-      case 'win':
-        limits = audio.markers[4];
-        break;
-      default:
-        limits = [0,0];
-    }
-    audio.buffer.seekTo(limits[0]);
-    audio.nextMarker = limits[1];
-    audio.buffer.play();
-  }
-};
-
-if(window.cordova) {
-  window.audio = _audioCordova;
-}
-else {
-  window.audio = _audioTag;
-}
+export const audio = new Audio(filename, markers);
 

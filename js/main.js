@@ -1,14 +1,15 @@
+import { audio } from './audio.js'
+import { game } from './game.js'
 
 window.addEventListener('load', function() {
-  FastClick.attach(document.body);
-  if(window.cordova) {
-    document.addEventListener('deviceready', function() {
-      controller.setup(game);
-      audio.load();
-    }, false);
-  }
-  else {
     controller.setup(game);
-    audio.load();
-  }
 },false);
+
+let soundsLoaded = false;
+const listerner = addEventListener('touchstart', function(e) {
+  if(!soundsLoaded) {
+    audio.load();
+    soundsLoaded = true;
+    removeEventListener('touchstart', listerner);
+  }
+});
