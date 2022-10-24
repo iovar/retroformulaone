@@ -1,14 +1,13 @@
-formulaoneracing_bb
+Retro Formula One
 ===================
 Retro racing game.
 
-Published under the MIT license.
-
+Play [here](https://iovar.github.io/retroformulaone/)
 
 
 The MIT License (MIT)
 
-Copyright (C) 2014 John Varouhakis
+Copyright (C) 2014 - 2023 Ioannis Varouchakis
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in

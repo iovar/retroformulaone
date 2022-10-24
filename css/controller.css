@@ -11,7 +11,7 @@ body {
   -webkit-user-select: none;
 }
 
-#console {
+#controller {
   position: relative;
   height: 100%;
   box-sizing: border-box;
