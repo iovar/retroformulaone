@@ -10,33 +10,41 @@ export class Controller {
         this.rightButton = document.querySelector('.right-button');
 
 
-        this.leftButton.addEventListener('touchstart', () => this.left());
-        this.leftButton.addEventListener('mousedown', () => this.left());
-        this.rightButton.addEventListener('touchstart', () => this.right());
-        this.rightButton.addEventListener('mousedown', () => this.right());
+        this.leftButton.addEventListener('touchstart', (e) => this.left(e), false);
+        this.leftButton.addEventListener('mousedown', (e) => this.left(e), false);
+        this.rightButton.addEventListener('touchstart', (e) => this.right(e), false);
+        this.rightButton.addEventListener('mousedown', (e) => this.right(e), false);
 
-        this.leftButton.addEventListener('touchend', () => this.relLeft());
-        this.leftButton.addEventListener('mouseup', () => this.relLeft());
-        this.rightButton.addEventListener('touchend', () => this.relRight());
-        this.rightButton.addEventListener('mouseup', () => this.relRight());
+        this.leftButton.addEventListener('touchend', (e) => this.relLeft(e));
+        this.leftButton.addEventListener('mouseup', (e) => this.relLeft(e));
+        this.rightButton.addEventListener('touchend', (e) => this.relRight(e));
+        this.rightButton.addEventListener('mouseup', (e) => this.relRight(e));
 
         window.addEventListener('keydown', (e) => this.keyDown(e));
         window.addEventListener('keyup', (e) => this.keyUp(e));
     }
 
-    left() {
+    left(e) {
         this.game.left();
         this.leftButton.classList.add('active');
+        e.preventDefault();
     }
 
-    right() {
+    right(e) {
         this.game.right();
         this.rightButton.classList.add('active');
+        e.preventDefault();
     }
 
-    relLeft() { this.leftButton.classList.remove('active'); }
+    relLeft(e) {
+        this.leftButton.classList.remove('active');
+        e.preventDefault();
+    }
 
-    relRight() { this.rightButton.classList.remove('active'); }
+    relRight(e) {
+        this.rightButton.classList.remove('active');
+        e.preventDefault();
+    }
 
     keyDown(e) {
         if (e.keyCode === LEFT_ARROW) {
