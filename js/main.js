@@ -1,7 +1,8 @@
-import { game } from './game.js'
-import { controller } from './controller.js'
+import { Game } from './game.js'
+import { Controller } from './controller.js'
 
 window.addEventListener('load', function() {
-    controller.setup(game);
+    const game = new Game();
+    new Controller(game);
 },false);
 

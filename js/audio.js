@@ -10,15 +10,14 @@ export class Audio {
     constructor(filename, markers) {
         this.markers = markers;
         this.filename = filename;
-        this.init();
     }
 
     init() {
         try {
             this.context = new AudioContext();
         }
-        catch (e) {
-            console.error('Failed to initialize audio context', e.stacktrace);
+        catch {
+            console.error('Failed to initialize audio context');
         }
     }
 
@@ -26,7 +25,8 @@ export class Audio {
         if (!this.context) {
             this.init();
         }
-        if(this.buffer !== null) {
+
+        if (this.buffer !== null || !this.context) {
             return;
         }
 
@@ -36,10 +36,9 @@ export class Audio {
     }
 
     async play(sound) {
-        if(!this.loaded) {
+        if (!this.loaded) {
             this.loaded = true;
             await this.load();
-            return;
         }
 
         const { start, end } = this.markers[sound] || { start: 0, end: 0 };
@@ -49,4 +48,3 @@ export class Audio {
         source.start(0, start, end - start);
     }
 };
-

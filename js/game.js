@@ -1,156 +1,111 @@
 import { Audio } from './audio.js'
+import { CHANCES, DEFAULT_MATRIX, LEVELS, PITSTOPS, ROUNDS, audioFilename, audioMarkers } from './config.js';
 
-const markers = {
-    roll: { start: 0, end: 0.3 },
-    move: { start: 2, end: 2.3 },
-    crash: { start: 4, end: 4.3 },
-    die: { start: 6, end: 7.6 },
-    win: { start: 9, end: 12.6 },
+const gameState = {
+    preGame: 0,
+    playing: 1,
+    lostLife: 2,
+    pitStop: 3,
+    gameOver: 4,
+    gameWon: 5,
 };
-const filename = 'audio/sounds.mp3';
 
-
-var gameModule = {
-    audio: null,
-    timers: {
-        loop: -1
-    },
-    matrix: [
-        [false, false, false],
-        [false, false, false],
-        [false, false, false],
-        [false, true, false]
-    ],
-    score: 0,
-    lives: 3,
-    level: 0,
-    change: 0,
-    // 0 : pre-game
-    // 1 : playing
-    // 2 : lost life
-    // 3 : pit stop
-    // 4 : lost all lives
-    // 5 : score 9999, game won (restarts)
-    state: 0,
-    ds : {},
-    counters : {
+export class Game {
+    audio = null;
+    loopTimer = -1;
+    score = 0;
+    lives = 3;
+    level = 0;
+    change = 0;
+    matrix = null;
+    state = gameState.preGame;
+    ds = {};
+    counters = {
         round : 0,
         crash: 0
-    },
-    inputBlocked: false,
-    chances: [
-        [4,2],
-        [5,2],
-        [5,3],
-        [7,3],
-        [7,4],
-        [8,4],
-        [8,5],
-        [9,5],
-        [9,6],
-        [9,7]
-    ],
-    levels: [
-        300,
-        600,
-        900,
-        1200,
-        1800,
-        2600,
-        3600,
-        4500,
-        6000,
-        9999
-    ],
-    pitstops: [
-        2000,
-        5000,
-        7800,
-        10000
-    ],
-    pitstops_made: 0,
-    rounds: [
-        14,
-        13,
-        12,
-        11,
-        10,
-        9,
-        8,
-        7,
-        6,
-        5
-    ],
-    init: function(screen) {
-        var ds = gameModule.ds;
-        this.audio = new Audio(filename, markers);
+    };
+    inputBlocked = false;
+    pitstopsMade = 0;
 
-        for(var i=0; i < 4; i++) {
-            for(var k=0; k < 3; k++) {
-                ds['row_'+i+'_'+k] = screen.querySelector('.row_'+i+'_'+k);
+    constructor() {
+        this.audio = new Audio(audioFilename, audioMarkers);
+
+        screen = document.querySelector('.lcd-panel');
+
+        this.ds = {
+            flags: screen.querySelector('.flags'),
+            fuelPump: screen.querySelector('.fuel_pump'),
+            gameOver: screen.querySelector('.game_over'),
+            life0: screen.querySelector('.life_0'),
+            life1: screen.querySelector('.life_1'),
+            life2: screen.querySelector('.life_2'),
+            pitStop: screen.querySelector('.pit_stop'),
+            text: screen.querySelector('.text'),
+        };
+
+        for (let i=0; i < 4; i++) {
+            for (let k=0; k < 3; k++) {
+                this.ds['row_'+i+'_'+k] = screen.querySelector('.row_'+i+'_'+k);
             }
         }
-        ds.flags = screen.querySelector('.flags');
-        ds.fuel_pump = screen.querySelector('.fuel_pump');
-        ds.gameModule_over = screen.querySelector('.game_over');
-        ds.life_0 = screen.querySelector('.life_0');
-        ds.life_1 = screen.querySelector('.life_1');
-        ds.life_2 = screen.querySelector('.life_2');
-        ds.pit_stop = screen.querySelector('.pit_stop');
-        ds.text = screen.querySelector('.text');
 
-        gameModule.render();
-        gameModule.timers.loop = setInterval(gameModule.loop, 80);
-    },
-    checkCrash: function() {
-        var matrix = gameModule.matrix;
-        for(var i = 0; i<3; i++) {
-            if(matrix[3][i] && matrix[2][i]) {
+        this.resetMatrix();
+        this.render();
+        this.loopTimer = setInterval(() => this.loop(), 80);
+    }
+
+    checkCrash() {
+        for (let i = 0; i<3; i++) {
+            if (this.matrix[3][i] && this.matrix[2][i]) {
                 return true;
-            }
-            else if(matrix[3][i]) {
+            } else if (this.matrix[3][i]) {
                 return false;
             }
         }
         return false;
-    },
-    newRow: function() {
-        var cn = Math.floor(Math.random()*10) + 1,
-            cp = Math.floor(Math.random()*3),
-            _row = [false, false, false],
-            i = 0;
+    }
 
-        if(cn <= gameModule.chances[gameModule.level][1]) {
-            for(let i = 0; i<3; i++) {
-                if(i!==cp) {
-                    _row[i]=true;
+    newRow() {
+        // CHANGES[level][0] => chance to have two cars in new row
+        // CHANGES[level][1] => chance to have only one car in new row
+        //
+        // cn = {1, 10}, if it is under CHANGES[level][0], or CHANCES[level][1], we have cars in new row
+        // cp = {0, 2}, filled positions when 2 cars, empty when 1 car
+
+        const cn = Math.floor(Math.random()*10) + 1;
+        const cp = Math.floor(Math.random()*3);
+        const row = [false, false, false];
+
+        if (cn <= CHANCES[this.level][0]) {
+            for (let i = 0; i<3; i++) {
+                if (i!==cp) {
+                    row[i]=true;
+                } else {
+                    row[i]=false;
                 }
-                else {
-                    _row[i]=false;
+            }
+        } else if (cn <= CHANCES[this.level][1]) {
+            for (let i = 0; i<3; i++) {
+                if (i===cp) {
+                    row[i]=true;
+                } else {
+                    row[i]=false;
                 }
             }
         }
-        else if(cn <= gameModule.chances[gameModule.level][0]) {
-            for(let i = 0; i<3; i++) {
-                if(i===cp) {
-                    _row[i]=true;
-                }
-                else {
-                    _row[i]=false;
-                }
-            }
-        }
-        return _row;
-    },
-    getPoints: function(row) {
-        var cn = 0,
-            score = 10;
-        for(let i=0; i<3; i++) {
-            if(row[i]) {
+        return row;
+    }
+
+    getPoints(row) {
+        let cn = 0;
+        let score = 5;
+        for (let i=0; i<3; i++) {
+            if (row[i]) {
                 cn++;
             }
         }
-        switch(cn) {
+
+        switch (cn) {
             case 1:
                 score = 20;
                 break;
@@ -158,280 +113,260 @@ var gameModule = {
                 score = 40;
         }
         return score;
-    },
-    checkLevel: function(score) {
-        if(score> gameModule.levels[gameModule.level]) {
-            gameModule.level+=1;
+    }
+
+    checkLevel(score) {
+        if (score> LEVELS[this.level]) {
+            this.level+=1;
         }
-    },
-    rollCars: function() {
-        var matrix = gameModule.matrix;
+    }
 
-
-        if(gameModule.state !== 0 && gameModule.checkCrash()) {
-            gameModule.lives--;
-            if(gameModule.lives>0) {
+    rollCars() {
+        if (this.state !== gameState.preGame && this.checkCrash()) {
+            this.lives--;
+            if (this.lives>0) {
                 this.audio.play('crash');
-                gameModule.state = 2;
-                gameModule.change++;
-                setTimeout(function() {
-                    gameModule.change++;
-                    gameModule.resetMatrix();
-                    gameModule.render();
-                    gameModule.state = 1;
+                this.state = gameState.lostLife;
+                this.change++;
+                setTimeout(() => {
+                    this.change++;
+                    this.resetMatrix();
+                    this.render();
+                    this.state = gameState.playing;
                 },2000);
-            }
-            else {
+            } else {
                 this.audio.play('die');
-                gameModule.state = 4;
-                gameModule.inputBlocked = true;
-                gameModule.change++;
-                setTimeout(function() {
-                    gameModule.inputBlocked = false;
-                    gameModule.change++;
-                    gameModule.state = 0;
+                this.state = gameState.gameOver;
+                this.inputBlocked = true;
+                this.change++;
+                setTimeout(() => {
+                    this.inputBlocked = false;
+                    this.change++;
+                    this.state = gameState.preGame;
                 },4000);
             }
         }
-        if(gameModule.state === 1) {
-            gameModule.score += gameModule.getPoints(gameModule.matrix[2]);
-            if(gameModule.score >=9999) {
+
+        if (this.state === gameState.playing) {
+            this.score += this.getPoints(this.matrix[2]);
+            if (this.score >= LEVELS[9]) {
                 this.audio.play('win');
-                gameModule.score = 9999;
-                gameModule.state = 5;
-                gameModule.inputBlocked = true;
-                setTimeout(function() {
-                    gameModule.inputBlocked = false;
+                this.score = LEVELS[9];
+                this.state = gameState.gameWon;
+                this.inputBlocked = true;
+                setTimeout(() => {
+                    this.inputBlocked = false;
                 }, 5000);
-                gameModule.change++;
-            }
-            else if(gameModule.score >= gameModule.pitstops[gameModule.pitstops_made]) {
+                this.change++;
+            } else if (this.score >= PITSTOPS[this.pitstopsMade]) {
                 this.audio.play('move');
-                gameModule.pitstops_made++;
-                gameModule.state = 3;
-                gameModule.inputBlocked = true;
-                setTimeout(function() {
-                    gameModule.inputBlocked = false;
+                this.pitstopsMade++;
+                this.state = gameState.pitStop;
+                this.inputBlocked = true;
+                setTimeout(() => {
+                    this.inputBlocked = false;
                 }, 3000);
-                gameModule.change++;
-                gameModule.matrix[3] = [false, false, false];
-            }
-            else {
+                this.change++;
+                this.matrix[3] = [false, false, false];
+            } else {
                 this.audio.play('roll');
-                gameModule.checkLevel(gameModule.score);
+                this.checkLevel(this.score);
             }
         }
-        if(gameModule.state !== 2 && gameModule.state !== 3) {
-            gameModule.matrix[2] = gameModule.matrix[1];
-            gameModule.matrix[1] = gameModule.matrix[0];
-            gameModule.matrix[0] = gameModule.newRow();
+
+        if (this.state !== gameState.lostLife && this.state !== gameState.pitStop) {
+            this.matrix[2] = this.matrix[1];
+            this.matrix[1] = this.matrix[0];
+            this.matrix[0] = this.newRow();
         }
-    },
-    loop: function() {
-        if(gameModule.counters.round >= gameModule.rounds[gameModule.level]) {
-            gameModule.counters.round = 0;
-            if(gameModule.state === 1 ||
-                gameModule.state === 0 ) {
-                gameModule.rollCars();
+    }
+
+    loop() {
+        if (this.counters.round >= ROUNDS[this.level]) {
+            this.counters.round = 0;
+            if (this.state === gameState.playing || this.state === gameState.preGame) {
+                this.rollCars();
             }
-            gameModule.render();
-        }
-        else {
-            gameModule.renderSelf();
-            if(gameModule.change > 0) {
-                gameModule.renderOther();
-                gameModule.change--;
+            this.render();
+        } else {
+            this.renderSelf();
+            if (this.change > 0) {
+                this.renderOther();
+                this.change--;
             }
-            gameModule.counters.round++;
+            this.counters.round++;
         }
-    },
-    resetMatrix: function() {
-        var matrix = gameModule.matrix;
-        for(var i=0; i < 4; i++) {
-            for(var k=0; k < 3; k++) {
-                matrix[i][k] = false;
-            }
-        }
-        matrix[3][1] = true;
-    },
-    reset: function() {
-        gameModule.resetMatrix();
-        gameModule.score = 0;
-        gameModule.lives = 3;
-        gameModule.level = 0;
-        gameModule.state = 0;
-        gameModule.change = 1;
-        gameModule.pitstops_made = 0;
-        gameModule.inputBlocked = false;
-    },
-    start: function() {
-        gameModule.reset();
-        gameModule.state = 1;
-    },
-    resume: function() {
-        gameModule.matrix[3][1] = true;
-        gameModule.resetMatrix();
-        gameModule.change++;
-        gameModule.state = 1;
-        gameModule.render();
-    },
-    left: function() {
-        if(gameModule.inputBlocked) {
+    }
+
+    resetMatrix() {
+        this.matrix = JSON.parse(JSON.stringify(DEFAULT_MATRIX))
+    }
+
+    reset() {
+        this.resetMatrix();
+        this.score = 0;
+        this.lives = 3;
+        this.level = 0;
+        this.state = gameState.preGame;
+        this.change = 1;
+        this.pitstopsMade = 0;
+        this.inputBlocked = false;
+    }
+
+    start() {
+        this.reset();
+        this.state = gameState.playing;
+    }
+
+    resume() {
+        this.matrix[3][1] = true;
+        this.resetMatrix();
+        this.change++;
+        this.state = gameState.playing;
+        this.render();
+    }
+
+    left() {
+        if (this.inputBlocked) {
             return;
         }
-        switch(gameModule.state) {
-            case 0:
+        switch (this.state) {
+            case gameState.preGame:
                 this.audio.play('move');
-                gameModule.start();
+                this.start();
                 break;
-            case 2:
-            case 4:
+            case gameState.lostLife:
+            case gameState.gameOver:
                 break;
-            case 3:
+            case gameState.pitStop:
                 this.audio.play('move');
-                gameModule.resume();
+                this.resume();
                 break;
-            case 5:
-                gameModule.reset();
-                gameModule.start();
+            case gameState.gameWon:
+                this.reset();
+                this.start();
                 break;
             default:
                 this.audio.play('move');
-                if(gameModule.matrix[3][1]) {
-                    gameModule.matrix[3][1] = false;
-                    gameModule.matrix[3][0] = true;
-                }
-                else if(gameModule.matrix[3][2]) {
-                    gameModule.matrix[3][2] = false;
-                    gameModule.matrix[3][1] = true;
+                if (this.matrix[3][1]) {
+                    this.matrix[3][1] = false;
+                    this.matrix[3][0] = true;
+                } else if (this.matrix[3][2]) {
+                    this.matrix[3][2] = false;
+                    this.matrix[3][1] = true;
                 }
         }
-    },
-    right: function() {
-        if(gameModule.inputBlocked) {
+    }
+
+    right() {
+        if (this.inputBlocked) {
             return;
         }
-        switch(gameModule.state) {
-            case 0:
+        switch (this.state) {
+            case gameState.preGame:
                 this.audio.play('move');
-                gameModule.start();
+                this.start();
                 break;
-            case 2:
-            case 4:
+            case gameState.lostLife:
+            case gameState.gameOver:
                 break;
-            case 3:
+            case gameState.pitStop:
                 this.audio.play('move');
-                gameModule.resume();
+                this.resume();
                 break;
-            case 5:
-                gameModule.reset();
-                gameModule.start();
+            case gameState.gameWon:
+                this.reset();
+                this.start();
                 break;
             default:
                 this.audio.play('move');
-                if(gameModule.matrix[3][0]) {
-                    gameModule.matrix[3][0] = false;
-                    gameModule.matrix[3][1] = true;
-                }
-                else if(gameModule.matrix[3][1]) {
-                    gameModule.matrix[3][1] = false;
-                    gameModule.matrix[3][2] = true;
+                if (this.matrix[3][0]) {
+                    this.matrix[3][0] = false;
+                    this.matrix[3][1] = true;
+                } else if (this.matrix[3][1]) {
+                    this.matrix[3][1] = false;
+                    this.matrix[3][2] = true;
                 }
         }
 
-    },
-    show: function(dse) {
-        dse.classList.add('on');
-    },
-    hide: function(dse) {
-        dse.classList.remove('on');
-    },
-    toggle: function(dse) {
-        dse.classList.toggle('on');
-    },
-    setScore: function() {
-        gameModule.ds.text.innerHTML=''+gameModule.score;
-    },
-    renderMatrix: function() {
-        var matrix = gameModule.matrix,
-            ds = gameModule.ds;
-        for(var i=0; i < 4; i++) {
-            for(var k=0; k < 3; k++) {
-                if(matrix[i][k]) {
-                    gameModule.show(ds['row_'+i+'_'+k]);
-                }
-                else {
-                    gameModule.hide(ds['row_'+i+'_'+k]);
-                }
-            }
-        }
-    },
-    renderSelf: function() {
-        var matrix = gameModule.matrix,
-            ds = gameModule.ds;
-        for(var k=0; k < 3; k++) {
-            if(matrix[3][k]) {
-                gameModule.show(ds['row_3_'+k]);
-            }
-            else {
-                gameModule.hide(ds['row_3_'+k]);
-            }
-        }
-    },
-    renderLives: function() {
-        var lives = gameModule.lives;
+    }
 
-        if(lives > 0) {
-            gameModule.show(gameModule.ds.life_0);
+    show(dse) { dse.classList.add('on'); }
+
+    hide(dse) { dse.classList.remove('on'); }
+
+    toggle(dse) { dse.classList.toggle('on'); }
+
+    setScore() { this.ds.text.innerHTML=''+this.score; }
+
+    renderMatrix() {
+        for (let i=0; i < 4; i++) {
+            for (let k=0; k < 3; k++) {
+                if (this.matrix[i][k]) {
+                    this.show(this.ds['row_'+i+'_'+k]);
+                } else {
+                    this.hide(this.ds['row_'+i+'_'+k]);
+                }
+            }
         }
-        else {
-            gameModule.hide(gameModule.ds.life_0);
+    }
+
+    renderSelf() {
+        for (let k=0; k < 3; k++) {
+            if (this.matrix[3][k]) {
+                this.show(this.ds['row_3_'+k]);
+            } else {
+                this.hide(this.ds['row_3_'+k]);
+            }
         }
-        if(lives > 1) {
-            gameModule.show(gameModule.ds.life_1);
+    }
+
+    renderLives() {
+        if (this.lives > 0) {
+            this.show(this.ds.life0);
+        } else {
+            this.hide(this.ds.life0);
         }
-        else {
-            gameModule.hide(gameModule.ds.life_1);
+        if (this.lives > 1) {
+            this.show(this.ds.life1);
+        } else {
+            this.hide(this.ds.life1);
         }
-        if(lives > 2) {
-            gameModule.show(gameModule.ds.life_2);
+        if (this.lives > 2) {
+            this.show(this.ds.life2);
+        } else {
+            this.hide(this.ds.life2);
         }
-        else {
-            gameModule.hide(gameModule.ds.life_2);
+    }
+
+    renderOther() {
+        if (this.state === gameState.preGame || this.state === gameState.gameOver) {
+            this.show(this.ds.gameOver);
+        } else {
+            this.hide(this.ds.gameOver);
         }
-    },
-    renderOther: function() {
-        if(gameModule.state === 0 ||
-            gameModule.state === 4) {
-            gameModule.show(gameModule.ds.gameModule_over);
+        if (this.state === gameState.pitStop) {
+            this.show(this.ds.fuelPump);
+            this.show(this.ds.pitStop);
+        } else {
+            this.hide(this.ds.fuelPump);
+            this.hide(this.ds.pitStop);
         }
-        else {
-            gameModule.hide(gameModule.ds.gameModule_over);
+        if (this.state === gameState.gameWon) {
+            this.show(this.ds.flags);
+        } else {
+            this.hide(this.ds.flags);
         }
-        if(gameModule.state === 3 ) {
-            gameModule.show(gameModule.ds.fuel_pump);
-            gameModule.show(gameModule.ds.pit_stop);
-        }
-        else {
-            gameModule.hide(gameModule.ds.fuel_pump);
-            gameModule.hide(gameModule.ds.pit_stop);
-        }
-        if(gameModule.state === 5 ) {
-            gameModule.show(gameModule.ds.flags);
-        }
-        else {
-            gameModule.hide(gameModule.ds.flags);
-        }
-    },
-    render: function() {
-        gameModule.renderMatrix();
-        gameModule.renderLives();
-        gameModule.setScore();
-        if(gameModule.change > 0) {
-            gameModule.renderOther();
-            gameModule.change--;
+    }
+
+    render() {
+        this.renderMatrix();
+        this.renderLives();
+        this.setScore();
+
+        if (this.change > 0) {
+            this.renderOther();
+            this.change--;
         }
     }
 };
-
-export const game = gameModule;
