@@ -1,4 +1,4 @@
-const cacheName = 'retroformulaone-cache-v2';
+const cacheName = 'retroformulaone-cache-v3';
 
 const cachedFiles = [
     './',
@@ -60,7 +60,7 @@ const fetchFromCacheFirst = async (event) => {
     const cache = await caches.open(cacheName);
     const response = await cache.match(event.request);
 
-    if (response) {
+    if (response && !navigator.onLine) {
         return response;
     }
 
